@@ -1,0 +1,79 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>测试</title>
+<link href="{BASEURL}/static/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+<style type="text/css">
+.page-width{width:96%;margin:20px auto;}
+</style>
+</head>
+
+<body>
+
+<div class="page-width">
+	<p>接口地址：</p>
+	<p><input type="hidden" value="{$type}" id="type" /></p>
+	<p><input type="text" value="{$api}" id="api" style="width:100%" /></p>
+	<p>接口参数：</p>
+	<p><textarea id="param" style="width:100%;height:100px;">{$param}</textarea></p>
+	<p align="center"><button id="testbtn" class="btn" type="button" style="width:100%">测试接口</button></p>
+	<div><pre id="result"></pre></div>
+</div>
+
+<script type="text/javascript" src="{BASEURL}/static/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="{BASEURL}/static/bootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript">
+function format(txt,compress){
+	var indentChar = '    ';   
+	if(/^\s*$/.test(txt)){   
+		//alert('数据为空,无法格式化! ');   
+		return txt;   
+	}   
+	try{var data=eval('('+txt+')');}   
+	catch(e){   
+		//alert('数据源语法错误,格式化失败! 错误信息: '+e.description,'err');   
+		return txt;   
+	};   
+	var draw=[],last=false,This=this,line=compress?'':'\n',nodeCount=0,maxDepth=0;   
+	   
+	var notify=function(name,value,isLast,indent/*缩进*/,formObj){   
+		nodeCount++;/*节点计数*/  
+		for (var i=0,tab='';i<indent;i++ )tab+=indentChar;/* 缩进HTML */  
+		tab=compress?'':tab;/*压缩模式忽略缩进*/  
+		maxDepth=++indent;/*缩进递增并记录*/  
+		if(value&&value.constructor==Array){/*处理数组*/  
+			draw.push(tab+(formObj?('"'+name+'":'):'')+'['+line);/*缩进'[' 然后换行*/  
+			for (var i=0;i<value.length;i++)   
+				notify(i,value[i],i==value.length-1,indent,false);   
+			draw.push(tab+']'+(isLast?line:(','+line)));/*缩进']'换行,若非尾元素则添加逗号*/  
+		}else   if(value&&typeof value=='object'){/*处理对象*/  
+				draw.push(tab+(formObj?('"'+name+'":'):'')+'{'+line);/*缩进'{' 然后换行*/  
+				var len=0,i=0;   
+				for(var key in value)len++;   
+				for(var key in value)notify(key,value[key],++i==len,indent,true);   
+				draw.push(tab+'}'+(isLast?line:(','+line)));/*缩进'}'换行,若非尾元素则添加逗号*/  
+			}else{   
+					if(typeof value=='string')value='"'+value+'"';   
+					draw.push(tab+(formObj?('"'+name+'":'):'')+value+(isLast?'':',')+line);   
+			};
+	};
+	var isLast=true,indent=0;
+	notify('',data,isLast,indent,false);
+	return draw.join('');
+}
+
+$('#testbtn').click(function(){
+	$('#result').html('请求中...');
+	$.ajax({
+		url:$('#api').val(),
+		data:$('#param').val(),
+		type:$('#type').val(),
+		success:function(response){
+			$('#result').html(format(response));
+		}
+	});
+});
+</script>
+</body>
+</html>

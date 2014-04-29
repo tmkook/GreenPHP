@@ -1,0 +1,4 @@
+RewriteEngine on 
+RewriteRule   api/(\w+)/(\w+)/(\w+)$ api.php?m=$1&c=$2&t=$3 [NC,QSA,L]
+RewriteRule   view/(\w+)/(\w+)$ index.php?m=$1&c=$2 [NC,QSA,L]
+RewriteRule   admin/(\w+)/(\w+)$ admin.php?m=$1&c=$2 [NC,QSA,L]
