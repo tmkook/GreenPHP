@@ -1,24 +1,40 @@
 <?php
 error_reporting(~E_NOTICE);
+
+//杩愯惀鐜楠岃瘉authkey鎵嶈兘璁块棶
+session_start();
+if(IS_DEV == 0 && $_SESSION['doc_view'] != 1){
+	if($_GET['authkey'] == 'moredoo'){
+		$_SESSION['doc_view'] = 1;
+	}else{
+		exit('forbid');
+	}
+}
+
+//閬嶅巻api
 $api = dirname(dirname(dirname(__FILE__))).'/api';
-
 define('TESTBASEURL',$_SERVER['HTTP_HOST'].BASEURL);
-
 $apis = array();
+
 foreach((array)glob($api.'/*') as $k=>$v){
 	if(is_dir($v)){
 		$m = basename($v);
+		if(in_array($m,array('exchange','global','passport','reward','mobile'))) continue;
 		foreach(glob("{$api}/{$m}/*.php") as $fk=>$fv){
 			$c = current(explode('.',basename($fv)));
 			if( ! class_exists($c,false)) require_once $fv;
 			$reflect = new ReflectionClass($c);
-			$methods = $reflect->getMethods(ReflectionMethod::IS_PUBLIC | ReflectionMethod::IS_FINAL); //获取公共方法
-			foreach($methods as $nb=>$mhd){
+			if( ! $reflect->getDocComment()) continue;
+			$methods_rst = $reflect->getMethods(ReflectionMethod::IS_PUBLIC | ReflectionMethod::IS_FINAL); //鑾峰彇鍏叡鏂规硶
+			$methods = array();
+			foreach($methods_rst as $nb=>$mhd){
 				$doc = $mhd->getDocComment();
-				if($mhd->getName()=='__construct' || empty($doc)){
-					unset($methods[$nb]);
+				if($mhd->getName() !== '__construct' && !empty($doc)){
+					$methods[$mhd->getName()] = $mhd;
 				}
 			}
+			//ksort($methods);
+			$methods = array_values($methods);
 			$apis[$m][] = array(
 				'name'=>$c,
 				'methods'=>$methods,
@@ -55,18 +71,18 @@ if(isset($_GET['vm']) && isset($_GET['vc']) && isset($_GET['vt'])){
 	$apidetails['data'] = $reflect->getData();
 	$apidetails['author'] = $reflect->getTag('@author');
 	$apidetails['edit'] = $reflect->getTag('@edit');
-	if(stripos($parseobj->getName(),'sig_') !== false) $apidetails['extparam'] = '{"sig":"SigString"}';
-	$apidetails['type'] = $reflect->getTag('@type');
-	//print_r($apidetails);exit;
-	$tpl = new Tpl(Config::get('tpl.conf/web'));
-	$tpl->display('docs/tpl/api_view.html',array('apis'=>$apidetails));	
+	if(stripos($parseobj->getName(),'sig_') !== false){
+		$apidetails['extparam'] = '{"sig":"SigString","reqapp":"test_php"}';	
+	}else{
+		$apidetails['extparam'] = '{"reqapp":"test_php"}';
+	}
+	$apidetails['type'] = implode(',',$reflect->getTag('@type'));
+	$tplfile = 'api_view.html';
+	$assign = array('apis'=>$apidetails);
 }else{
-	$tpl = new Tpl(Config::get('tpl.conf/web'));
-	$tpl->display('docs/tpl/api_list.html',array('apis'=>$apis));
+	$tplfile = 'api_list.html';
+	$assign = array('apis'=>$apis);
 }
-/*
-$method = $apis['passport'][0]['methods'][1];
-$doc = $method->getDocComment();
-$reflect = new ApiDocReflect($doc);
-print_r($reflect->getTag('@edit'));
-*/
+
+$tpl = new Tpl(Config::get('tpl.conf/web'));
+$tpl->display($tplfile,$assign);

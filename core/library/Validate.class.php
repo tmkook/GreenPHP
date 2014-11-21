@@ -109,7 +109,7 @@ class Validate
 	* 必填项
 	*/
 	public function required($data){
-		return ! empty($data);
+		return isset($data);
 	}
 	
 	//二个字段相等

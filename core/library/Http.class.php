@@ -4,162 +4,84 @@
  * 发送HTTP网络请求类
  *
  * @version 3.0.0
- * @author open.qq.com
- * @copyright ? 2012, Tencent Corporation. All rights reserved.
- * @ History:	 
- *				 3.0.1 | coolinchen | 2012-09-07 10:30:00 | add funtion makeRequestWithFile
- *               3.0.0 | nemozhang | 2011-03-09 15:33:04 | initialization				 
+ * @author moredoo
  */
 class Http
 {
 	/**
 	 * 执行一个 HTTP 请求
 	 *
-	 * @param string 	$url 	执行请求的URL 
-	 * @param mixed	$params 表单参数
-	 * 							可以是array, 也可以是经过url编码之后的string
-	 * @param mixed	$cookie cookie参数
-	 * 							可以是array, 也可以是经过拼接的string
-	 * @param string	$method 请求方法 post / get
-	 * @param string	$protocol http协议类型 http / https
+	 * @param string $url 执行请求的URL 
+	 * @param mixed	$params 表单参数可以是array, 也可以是经过url编码之后的string
+	 * @param mixed	$cookie cookie参数可以是array, 也可以是经过拼接的string
+	 * @param string $method 请求方法 post / get
+	 * @param string $protocol http协议类型 http / https
 	 * @return array 结果数组
 	 */
-	static public function request($url, $params, $cookie, $method='post', $protocol='http'){   
-		$query_string = self::makeQueryString($params);	   
-	    $cookie_string = self::makeCookieString($cookie);
-	    $ch = curl_init();
-	    if ('get' == $method){
-		    curl_setopt($ch, CURLOPT_URL, "{$url}?{$query_string}");
-	    }else{
-		    curl_setopt($ch, CURLOPT_URL, $url);
-		    curl_setopt($ch, CURLOPT_POST, 1);
-		    curl_setopt($ch, CURLOPT_POSTFIELDS, $query_string);
-	    }
-        
-	    curl_setopt($ch, CURLOPT_HEADER, false);
-	    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-	    curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 3);
-
-        // disable 100-continue
-        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Expect:'));
-
-	    if (!empty($cookie_string))
-	    {
-	    	curl_setopt($ch, CURLOPT_COOKIE, $cookie_string);
-	    }
-	    
-	    if ('https' == $protocol)
-	    {
+	public static function request($query_url, $data = '',$cookie='',$method='post', $is_url = true, $timeout = 30) {
+		$url = parse_url($query_url);
+		$url['path'] = empty($url['path'])? '/' : $url['path'];
+		//$url['port'] = empty($url['port'])? 80  : $url['port'];
+		//$url['host'] = $is_url? $url['host'] : gethostbyname($url['host']);
+		//open connection
+		$ch = curl_init();
+		if(!empty($data)){
+			$data = self::makeQueryString($data);
+		}
+		if($method == 'post') {
+			curl_setopt($ch,CURLOPT_URL,$query_url);
+			curl_setopt($ch,CURLOPT_POST,1);
+			curl_setopt($ch,CURLOPT_POSTFIELDS,$data);
+		}else{
+			$url['query'] = empty($url['query'])? $data : $url['query'].'%26'.$data;
+			$url['path'] .= (isset($url['query'])? '?' . $url['query'] : '') . (isset($url['fragment'])? '#' . $url['fragment'] : '');
+			$query_url = $url['scheme'].'://'.$url['host'].$url['path'];
+			curl_setopt($ch,CURLOPT_URL,$query_url);
+		}
+		curl_setopt($ch,CURLOPT_HEADER,false);
+		curl_setopt($ch,CURLOPT_RETURNTRANSFER,true);
+		curl_setopt($ch,CURLOPT_CONNECTTIMEOUT,$timeout);
+		curl_setopt($ch, CURLOPT_HTTPHEADER, array('Expect:'));
+		//变量初始化
+		if(!empty($cookie)){
+			$cookie =  self::makeQueryString($cookie);
+			curl_setopt($ch,CURLOPT_COOKIE,$cookie);
+		}
+		//set the url, number of POST vars, POST data
+		if($url['scheme'] == 'https'){
 	    	curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
     		curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
-	    }
-	
-	    $ret = curl_exec($ch);
-	    $err = curl_error($ch);
-	    
-	    if (false === $ret || !empty($err))
-	    {
-		    $errno = curl_errno($ch);
-		    $info = curl_getinfo($ch);
-		    curl_close($ch);
-
-	        return array(
-	        	'result' => false,
-	        	'errno' => $errno,
-	            'msg' => $err,
-	        	'info' => $info,
-	        );
-	    }
-       	curl_close($ch);
-        return $ret;
+		}
+		if($url['port']){
+			curl_setopt($ch,CURLOPT_PORT,$url['port']);
+		}
+		curl_setopt($ch,CURLOPT_AUTOREFERER,true);
+		curl_setopt($ch,CURLOPT_FOLLOWLOCATION,true);
+		curl_setopt($ch,CURLOPT_FRESH_CONNECT,true);
+		curl_setopt($ch,CURLOPT_TIMEOUT,$timeout);
+		curl_setopt($ch,CURLOPT_BINARYTRANSFER,true);
+		//$useragent = !empty($_SERVER['HTTP_USER_AGENT']) ? null : $_SERVER['HTTP_USER_AGENT'];
+		//curl_setopt($ch,CURLOPT_USERAGENT,$useragent);
+		
+		//execute post
+		$response = curl_exec($ch);
+		//get response code
+		$response_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+		//close connection 
+		curl_close($ch);
+		//return result
+		if($response_code == 200) {
+			return $response;
+		} else {
+			return false;
+		}
 	}
 	
-	
-	/**
-	 * 执行一个 HTTP 请求,以post方式，multipart/form-data的编码类型上传文件
-	 *
-	 * @param string 	$url 	执行请求的URL
-	 * @param mixed	$params 表单参数，必须是array, 对于文件表单项 直接传递文件的全路径, 并在前面增加'@'符号
-     *                          举例: array('upload_file'=>'@/home/xxx/hello.jpg', 'field1'=>'value1');
-	 * @param mixed	$cookie cookie参数
-	 * 							可以是array, 也可以是经过拼接的string
-	 * @param string	$protocol http协议类型 http / https
-	 * @return array 结果数组
-	 */
-	static public function requestWithFile($url, $params, $cookie, $protocol='http'){      
-	    $cookie_string = self::makeCookieString($cookie);
-	    $ch = curl_init();
-	    curl_setopt($ch, CURLOPT_URL, $url);
-		curl_setopt($ch, CURLOPT_POST, 1);
-		curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
-	    curl_setopt($ch, CURLOPT_HEADER, false);
-	    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-	    curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 3);
-
-        // disable 100-continue
-        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Expect:'));
-
-	    if (!empty($cookie_string))
-	    {
-	    	curl_setopt($ch, CURLOPT_COOKIE, $cookie_string);
-	    }
-	    
-	    if ('https' == $protocol)
-	    {
-	    	curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-    		curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
-	    }
-	
-	    $ret = curl_exec($ch);
-	    $err = curl_error($ch);
-	    
-	    if (false === $ret || !empty($err))
-	    {
-		    $errno = curl_errno($ch);
-		    $info = curl_getinfo($ch);
-		    curl_close($ch);
-
-	        return array(
-	        	'result' => false,
-	        	'errno' => $errno,
-	            'msg' => $err,
-	        	'info' => $info,
-	        );
-	    }
-	    
-       	curl_close($ch);
-        return $ret;
-	}
-	
-	static public function makeQueryString($params){
-		/*if (is_string($params))
-			return $params;
-			
-		$query_string = array();
-	    foreach ($params as $key => $value)
-	    {   
-	        array_push($query_string, rawurlencode($key) . '=' . rawurlencode($value));
-	    }   
-	    $query_string = join('&', $query_string);
-	    return $query_string;*/
-        $query_string = http_build_query((array)$params,'','&');
-        return $query_string;
-	}
-
-	static public function makeCookieString($params){
-		/*if (is_string($params))
-			return $params;
-			
-		$cookie_string = array();
-	    foreach ($params as $key => $value)
-	    {   
-	        array_push($cookie_string, $key . '=' . $value);
-	    }   
-	    $cookie_string = join('; ', $cookie_string);
-	    return $cookie_string;*/
-        $query_string = http_build_query((array)$params);
-        return $query_string;
+	public static function makeQueryString($data){
+		if(is_array($data)){
+			$data = http_build_query($data,'','&');
+		}
+		return $data;
 	}
 }
 
-// end of script

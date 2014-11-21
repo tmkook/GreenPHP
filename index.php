@@ -1,18 +1,6 @@
 <?php
-/*
-* 初始化
-* 自动加载library类库
-* 自动加载extends扩展类库
-* 增加配置文件目录
-*/
-require_once 'core/library/Loader.class.php';
-Loader::addPath(dirname(__FILE__).'/core/extends/');
-Loader::autoload();
-Config::addPath(dirname(__FILE__).'/core/config/');
-
-$path = trim(dirname($_SERVER['SCRIPT_NAME']),'/');
-$path = empty($path)? '' : '/'.$path;
-define('BASEURL',$path);
+//初始化
+require_once 'core/boot.inc.php';
 
 /*
 * 获取请求模块
@@ -21,14 +9,12 @@ define('BASEURL',$path);
 * t 为控制器内自定义方法
 * 将请求的模块控制器加载进来
 */
-$m = empty($_GET['m'])? 'mgr' : addslashes($_GET['m']);
-$c = empty($_GET['c'])? 'index' : addslashes($_GET['c']);
-$file = "apps/web/{$m}/";
-if( ! is_dir($file)){
-    throw new Exception("请求的模块不存在",302);
-}
-if( ! file_exists($file.$c.'.php')){
-    throw new Exception("请求的模块文件不存在",303);
+$_GET['m'] = empty($_GET['m'])? 'home' : addslashes($_GET['m']);
+$_GET['c'] = empty($_GET['c'])? 'index' : addslashes($_GET['c']);
+$file = APPPATH."/web/{$_GET['m']}/";
+
+if( ! is_dir($file) ||  ! file_exists($file.$_GET['c'].'.php')){
+    exit(404);
 }
 
-require_once $file.$c.'.php';
+require_once $file.$_GET['c'].'.php';

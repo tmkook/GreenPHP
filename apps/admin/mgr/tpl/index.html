@@ -1,0 +1,101 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>目睹游戏管理中心</title>
+<link href="{CDN}/static/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+<link href="{CDN}/static/admin/css/layout.min.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+
+<div class="head-wrap">
+    <div class="head-logo left"><a href="./index">目睹游戏管理中心</a></div>
+    <div class="head-nav left">
+    	
+    </div>
+    <div class="head-info right">
+        <div class="btn-group">
+        <button class="btn btn-inverse" title="修改个人资料" onclick="$('#Main').attr('src','{BASEURL}/admin/mgr/edit')"><span class="icon-user icon-white"></span> {$_SESSION['login_admin']['realname']}</button>
+        <button class="btn btn-inverse" title="退出系统" onclick="if(confirm('确定退出？')) window.location.href='./logout'"><span class="icon-off icon-white"></span></button>
+        </div>
+    </div>
+</div>
+
+<div class="side-wrap">
+	<div class="sidebar-scroll">
+
+		<input id="SearchMenu" type="text" placeholder="搜索菜单" class="span2"/>
+
+        
+        <ul class="sidebar-menu">
+            <li><a target="_mgrmain" href="{BASEURL}/admin/mgr/welcome"><span class="icon"><i class="icon-home icon-white"></i></span><span class="text">首页</span></a></li>
+			<!--{foreach($menus as $category => $childs):}-->
+			<li>
+                <a href="#sidebar-menu-unfold-{$category}" data-toggle="collapse"><span class="icon"><i class="{$childs['icon']} icon-white"></i></span><span class="text">{$childs['name']}</span></a>
+                <ul id="sidebar-menu-unfold-{$category}" class="collapse secondary">
+					<!--{foreach($childs['childs'] as $child):}-->
+                    <li><a target="_mgrmain" href="{BASEURL}/admin/{$child['uri']}">{$child['name']}</a></li>
+					<!--{endforeach;}-->
+                </ul>
+            </li>
+			<!--{endforeach;}-->
+        </ul>
+    </div>
+</div>
+
+<div class="body-wrap">
+<iframe name="_mgrmain" id="Main" width="100%" height="100%" frameborder="0" marginheight="0" marginwidth="0" src="{BASEURL}/admin/mgr/welcome"></iframe>
+</div>
+
+<script type="text/javascript" src="{CDN}/static/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="{CDN}/static/bootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript">
+/*
+var iframe = document.getElementById("Main"); 
+if (iframe.attachEvent){
+	iframe.attachEvent("onload", function(){
+	alert("Local iframe is now loaded.");
+	}); 
+} else { 
+	iframe.onload = function(){ 
+		alert("Local iframe is now loaded."); 
+	}; 
+} 
+*/
+
+//菜单搜索
+var keyword = {$search_word};
+var uri = {$search_uri};
+$('#SearchMenu').typeahead({
+	source:keyword,
+	updater:function(item){
+		for(var i = 0; i< keyword.length; i++){
+			if(keyword[i] == item){
+				$('#Main').attr('src','{BASEURL}/admin/'+uri[i]);
+				var aobjs = $('.sidebar-menu').find('a');
+				for(j=0;j<aobjs.length;j++){
+					if(keyword[i] == $(aobjs[j]).html()){
+						var a = $(aobjs[j]);
+						a.parent().parent().css('height','auto');
+						a.fadeOut('speed',function(){
+							a.addClass('active');
+							a.fadeIn('slow');
+						});
+						setTimeout(function(){
+							a.fadeOut('slow',function(){
+								a.removeClass('active');
+								a.fadeIn('speed');
+							});
+							
+						},5000);
+						return;
+					}
+				}
+			}
+		}
+	}
+});
+</script>
+</body>
+</html>

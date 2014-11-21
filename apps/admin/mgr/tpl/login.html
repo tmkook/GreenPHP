@@ -1,0 +1,40 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>home</title>
+<link href="{CDN}/static/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+<link href="{CDN}/static/admin/css/layout.min.css" rel="stylesheet" type="text/css">
+</head>
+
+<body class="login-body">
+
+<div class="login-header"></div>
+<form method="post">
+<div class="modal login-modal">
+  <div class="modal-header">
+    <h3>用户登录</h3>
+  </div>
+  <div class="modal-body">
+	<!--{if(!empty($form_msg)):}--><div class="text-error" style="text-align:center;margin-bottom:10px;">{$form_msg}</div><!--{endif;}-->
+    <div class="input-prepend">
+    	<span class="add-on"><i class="icon-user"></i></span>
+    	<input class="span4" id="prependedInput" type="text" placeholder="用户名" name="username" value="{$_POST['username']}" />
+    </div>
+    <div class="input-prepend">
+    	<span class="add-on"><i class="icon-lock"></i></span>
+    	<input class="span4" id="appendedInput" name="password" type="password" placeholder="密码" name="password" />
+    </div>
+  </div>
+  <div class="modal-footer form-inline">
+  	<label class="checkbox pull-left"><input type="checkbox" name="mark" value="1" disabled />保持登录状态</label>
+    <button class="btn btn-primary">登录</button>
+  </div>
+</div>
+</form>
+
+
+<script type="text/javascript" src="{CDN}/static/jquery/jquery.min.js"></script> 
+<script type="text/javascript" src="{CDN}/static/bootstrap/js/bootstrap.min.js"></script>
+</body>
+</html>

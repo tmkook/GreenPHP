@@ -1,0 +1,74 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>数据库日志</title>
+<link href="{CDN}/static/bootstrap/css/bootstrap.css" rel="stylesheet" type="text/css">
+<link href="{CDN}/static/admin/css/style.min.css" rel="stylesheet" type="text/css">
+<link href="{CDN}/static/datetimepicker/css/datetimepicker.min.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+
+<div class="breadcrumb-box">
+<ul class="breadcrumb">
+  <li>日志 <span class="divider">/</span></li>
+  <li><a href="#">数据库日志</a></li>
+</ul>
+</div>
+
+<div class="body-box">
+  <div class="table-tools clearfix">
+    <form class="pull-left">
+       	表：<select name='table'>
+			<!--{foreach($tables as $key => $table):}-->
+  			<option value ="{$table['domain']}logs" <!--{if($_GET['table']==$table['domain'].'logs'):}-->selected<!--{endif;}-->>{$table['name']}</option>
+  			<!--{endforeach;}-->
+  			</select>
+		日期：<input type="text" class="datetime span3" name="start" value="{$start}" /> 至 <input type="text" class="datetime span3" name="end" value="{$end}"/>
+       	关键字:<input type="text" name="msg"<!--{if(!empty($_GET['msg'])):}-->value="{$_GET['msg']}"<!--{endif;}--> />
+        <button class="btn">查询</button>
+    </form>
+    <!--{if(!empty($lists)):}--><div class="pull-right"><span>{$show_page} / {$last_page} /  {$page_total_rows}</span> <a href="javascript:;" class="PrevPage">上一页</a> <a href="javascript:;" class="NextPage">下一页</a></div><!--{endif;}-->
+  </div>
+<table class="table table-hover table-striped" id="container">
+<!--{if(!empty($lists)):}-->
+<thead>
+  <tr>
+    <th>信息</th>
+    <th width="180">时间</th>
+  </tr>
+</thead>
+
+<tbody>
+	  <!--{foreach($lists as $list):}-->
+		  <tr>
+			<td><pre>{$list['msg']}</pre></td>
+		    <td><!--{echo date('Y-m-d H:i',$list['created'])}--></td>
+		  </tr>
+	  <!--{endforeach;}-->
+
+</tbody>
+<!--{endif;}-->
+</table>
+  <div class="table-tools">
+    <!--{if(!empty($lists)):}--><div align="center"><span>{$show_page} / {$last_page} /  {$page_total_rows}</span> <a href="javascript:;" class="PrevPage">上一页</a> <a href="javascript:;" class="NextPage">下一页</a></div><!--{endif;}-->
+  </div>
+</div>
+
+<script type="text/javascript" src="{CDN}/static/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="{CDN}/static/bootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="{CDN}/static/datetimepicker/js/bootstrap-datetimepicker.min.js"></script>
+<script type="text/javascript" src="{CDN}/static/datetimepicker/locales/bootstrap-datetimepicker.zh-CN.js"></script>
+<script type="text/javascript" src="{CDN}/static/admin/js/admin.min.js"></script>
+<script type="text/javascript">
+window.onload=function(){
+  var div = document.getElementById("container");
+  var s=div.innerHTML;
+var re = /(http:\/\/[\w.\/\?\&\=\;]+)/gi;
+  div.innerHTML=s.replace(re,'<a href="$1">$1</a>');
+}
+</script>
+</body>
+</html>
+

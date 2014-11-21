@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <title>测试</title>
-<link href="{BASEURL}/static/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+<link href="{CDN}/static/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css">
 <style type="text/css">
 .page-width{width:96%;margin:20px auto;}
 </style>
@@ -21,8 +21,8 @@
 	<div><pre id="result"></pre></div>
 </div>
 
-<script type="text/javascript" src="{BASEURL}/static/jquery/jquery.min.js"></script>
-<script type="text/javascript" src="{BASEURL}/static/bootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="{CDN}/static/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="{CDN}/static/bootstrap/js/bootstrap.min.js"></script>
 <script type="text/javascript">
 function format(txt,compress){
 	var indentChar = '    ';   
@@ -65,12 +65,14 @@ function format(txt,compress){
 
 $('#testbtn').click(function(){
 	$('#result').html('请求中...');
+	var start = new Date().getTime();
 	$.ajax({
 		url:$('#api').val(),
 		data:$('#param').val(),
 		type:$('#type').val(),
 		success:function(response){
-			$('#result').html(format(response));
+			var runtime = new Date().getTime() - start;
+			$('#result').html(format(response) + "\r\n响应时间：" + runtime + '毫秒');
 		}
 	});
 });

@@ -1,0 +1,75 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>管理员列表</title>
+<link href="{CDN}/static/bootstrap/css/bootstrap.css" rel="stylesheet" type="text/css">
+<link href="{CDN}/static/admin/css/style.min.css" rel="stylesheet" type="text/css">
+<link href="{CDN}/static/datetimepicker/css/datetimepicker.min.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+
+<div class="breadcrumb-box">
+<ul class="breadcrumb">
+  <li>管理员 <span class="divider">/</span></li>
+  <li><a href="#">管理员列表</a></li>
+</ul>
+
+</div>
+
+<div class="body-box">
+  <div class="table-tools clearfix">
+    <form class="pull-left">
+    	类型：<select class="span2" name="field">
+			<!--{foreach($fields as $key=>$val):}-->
+        	<option value="{$key}" <!--{if($key==$_GET['field']):}--> selected <!--{endif;}--> >{$val}</option>
+			<!--{endforeach;}-->
+        </select>
+        <input type="text" value="{$_GET['wd']}" name="wd" class="span2" />
+        <button class="btn">查询</button>
+    </form>
+    <div class="pull-right">{$show_page}/{$last_page} <a href="javascript:;" class="PrevPage">上一页</a> <a href="javascript:;" class="NextPage">下一页</a></div>
+  </div>
+<table class="table table-hover table-striped">
+<thead>
+  <tr>
+  	<th>用户ID</th>
+    <th>帐号</th>
+    <th>真实姓名</th>
+	<th>渠道</th>
+	<th>角色</th>
+	<th>状态</th>
+    <th>创建时间</th>
+	<th>操作</th>
+  </tr>
+</thead>
+<tbody>
+	<!--{foreach($lists as $list):}-->
+  <tr>
+ 	<td>{$list['id']}</td>
+    <td>{$list['username']}</td>
+    <td>{$list['realname']}</td>
+	<td>{$list['platform']}&nbsp;</td>
+	<td>{$roles[$list['role']]}</td>
+	<td>{$flag[$list['flag']]}</td>
+    <td><!--{echo date('Y-m-d H:i',$list['createtime'])}--></td>
+	<td><a href="admin/manager/admin_user_add?id={$list['id']}">修改</a></td>
+  </tr>
+  <!--{endforeach;}-->
+
+</tbody>
+</table>
+  <div class="table-tools">
+    <div align="center"><span>{$show_page} / {$last_page} /  {$page_total_rows}</span> <a href="javascript:;" class="PrevPage">上一页</a> <a href="javascript:;" class="NextPage">下一页</a></div>
+  </div>
+</div>
+
+<script type="text/javascript" src="{CDN}/static/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="{CDN}/static/bootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="{CDN}/static/datetimepicker/js/bootstrap-datetimepicker.min.js"></script>
+<script type="text/javascript" src="{CDN}/static/datetimepicker/locales/bootstrap-datetimepicker.zh-CN.js"></script>
+<script type="text/javascript" src="{CDN}/static/admin/js/admin.min.js"></script>
+</body>
+</html>
+

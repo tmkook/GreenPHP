@@ -1,0 +1,42 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>修改资料</title>
+<link href="{CDN}/static/bootstrap/css/bootstrap.css" rel="stylesheet" type="text/css">
+<link href="{CDN}/static/admin/css/style.min.css" rel="stylesheet" type="text/css">
+<link href="{CDN}/static/datetimepicker/css/datetimepicker.min.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+
+<div class="breadcrumb-box">
+	<ul class="breadcrumb">
+	  <li>管理 <span class="divider">/</span></li>
+	  <li><a href="#">修改资料</a></li>
+	</ul>
+</div>
+
+
+<div class="body-box">
+	<form class="form-inline" method="post" onsubmit="return request(this,window.location.href);">
+		<div class="control-group">
+			<div class="group-row">用户名：<input type="text" value="{$userinfo['username']}" disabled></div>
+			<div class="group-row">新昵称：<input type="text" name="realname" value="{$userinfo['realname']}"></div>
+			<div class="group-row">新密码：<input type="password" name="password"></div>
+		</div>
+		<div class="control-group">
+			<div class="controls text-center">
+			  <button type="submit" class="btn">重置密码</button>
+			</div>
+		</div>
+	</form>
+</div>
+
+<script type="text/javascript" src="{CDN}/static/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="{CDN}/static/bootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="{CDN}/static/datetimepicker/js/bootstrap-datetimepicker.min.js"></script>
+<script type="text/javascript" src="{CDN}/static/datetimepicker/locales/bootstrap-datetimepicker.zh-CN.js"></script>
+<script type="text/javascript" src="{CDN}/static/admin/js/admin.min.js"></script>
+</body>
+</html>

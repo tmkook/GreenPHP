@@ -39,7 +39,7 @@ class Paging
     * @parame integer $page_half 前后页码数
     *
     */
-    public function __construct($total, $show, $rows=10, $size=10){
+    public function __construct($total, $show, $rows=20, $size=10){
         $this->_total = $total;
 		$this->_show  = $show <= 0? 1 : $show;
 		$this->_rows  = $rows;
@@ -134,4 +134,8 @@ class Paging
 		}
 		return $next;
     }
+	
+	public function getLast(){
+		return $this->_last;
+	}
 }

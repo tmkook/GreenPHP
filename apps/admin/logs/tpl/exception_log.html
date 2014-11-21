@@ -1,0 +1,67 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>异常服务日志</title>
+<link href="{CDN}/static/bootstrap/css/bootstrap.css" rel="stylesheet" type="text/css">
+<link href="{CDN}/static/admin/css/style.min.css" rel="stylesheet" type="text/css">
+<link href="{CDN}/static/datetimepicker/css/datetimepicker.min.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+
+<div class="breadcrumb-box">
+<ul class="breadcrumb">
+  <li>日志 <span class="divider">/</span></li>
+  <li><a href="#">异常服务日志</a></li>
+</ul>
+</div>
+
+<div class="body-box">
+  <div class="table-tools clearfix">
+    <form class="pull-left">       	
+		服务器IP：<input type="text" class="span3" name="log_host" value="{$log_host}" /> 
+		ssh-name: <input type="text" class="span3" name="log_name" value="{$log_name}"/>
+        <button class="btn">查询</button>
+    </form>
+   </div>
+<table class="table table-hover table-striped">
+<!--{if(!empty($lists)):}-->
+<tbody>
+	  <!--{foreach($lists as $list):}-->
+		  <tr>
+			<td> args:<br/> 
+			<!--{foreach($list['args'] as $val):}-->
+			         {$val}  &nbsp;&nbsp;
+			  <!--{endforeach;}-->
+			  <br/><br/>		
+			  desc:<br/>
+			      {$list['desc']}<br/><br/>
+			      
+			  stack: <br/>
+			  <!--{if(!empty($list['stack'])):}-->
+			   <!--{foreach($list['stack'] as $val):}-->
+			         {$val}  <br/>
+			  <!--{endforeach;}-->
+			  <!--{endif;}-->
+			</td>
+		    <td width="200">{$list['date']}<br/>
+		   PID: {$list['pid']}<br/>
+		   uptime: {$list['uptime']}<br/>
+		    </td>
+		  </tr>
+	  <!--{endforeach;}-->
+
+</tbody>
+<!--{endif;}-->
+</table>
+</div>
+
+<script type="text/javascript" src="{CDN}/static/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="{CDN}/static/bootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="{CDN}/static/datetimepicker/js/bootstrap-datetimepicker.min.js"></script>
+<script type="text/javascript" src="{CDN}/static/datetimepicker/locales/bootstrap-datetimepicker.zh-CN.js"></script>
+<script type="text/javascript" src="{CDN}/static/admin/js/admin.min.js"></script>
+</body>
+</html>
+

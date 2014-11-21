@@ -86,8 +86,8 @@ class ApiDocReflect
 			$row = explode(' ',$bv);
 			if($row[0]==$tag){
 				unset($row[0]);
-				$row = implode(' ',$row);
-				$parames = $row;
+				//$row = implode(' ',$row);
+				$parames = array_values($row);
 				unset($this->blocks[$bk]);
 			}
 		}

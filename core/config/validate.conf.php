@@ -5,7 +5,7 @@ return array(
 		array(
 			'field'=>'username',
 			'label'=>'用户名',
-			'rules'=> array('required','min'=>5,'max'=>18)
+			'rules'=> array('required','minlen'=>5,'maxlen'=>18)
 		),
     ),
 	//设备号注册
@@ -27,7 +27,7 @@ return array(
 		array(
 			'field'=>'platform',
 			'label'=>'平台',
-			'rules'=> array('required','safe')
+			'rules'=> array('safe')
 		),
 		array(
 			'field'=>'regapp',
@@ -37,12 +37,7 @@ return array(
 		array(
 			'field'=>'username',
 			'label'=>'用户名',
-			'rules'=> array('min'=>5,'max'=>18)
-		),
-		array(
-			'field'=>'platform',
-			'label'=>'平台',
-			'rules'=> array('required','safe')
+			'rules'=> array('minlen'=>5,'maxlen'=>18)
 		),
 		array(
 			'field'=>'mobile',
@@ -57,7 +52,7 @@ return array(
 		array(
 			'field'=>'nickanme',
 			'label'=>'昵称',
-			'rules'=> array('safe')
+			'rules'=> array('safe','maxlen'=>16)
 		),
 		array(
 			'field'=>'realname',
@@ -69,16 +64,11 @@ return array(
 			'label'=>'平台',
 			'rules'=> array('safe')
 		),
-		array(
-            'field'=>'logapp',
-            'label'=>'登录设备',
-            'rules'=> array('safe')
-        ),
     ),
 	//用户名登录
     'id_login'=> array(
         array(
-            'field'=>'id',
+            'field'=>'uin',
             'label'=>'用户id',
             'rules'=> array('required','integer')
         ),
@@ -122,7 +112,7 @@ return array(
 		array(
             'field'=>'logapp',
             'label'=>'登录设备',
-            'rules'=> array('required','safe')
+            'rules'=> array('required')
         ),
     ),
 

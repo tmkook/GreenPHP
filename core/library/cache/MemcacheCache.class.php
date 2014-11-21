@@ -24,7 +24,7 @@ class MemcacheCache extends Cache
 
 	function set($key,$value,$expire=0){
 		if($expire==0) $expire = intval($this->expire);
-		$this->memcache->set($this->domain.$key,$value,MEMCACHE_COMPRESSED,$expire);
+		$this->memcache->set($this->domain.$key,$value,MEMCACHE_COMPRESSED,$expire+time());
 	}
 
 	function get($key){

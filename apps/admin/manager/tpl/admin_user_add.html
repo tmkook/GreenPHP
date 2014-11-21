@@ -1,0 +1,51 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>添加管理员</title>
+<link href="{CDN}/static/bootstrap/css/bootstrap.css" rel="stylesheet" type="text/css">
+<link href="{CDN}/static/admin/css/style.min.css" rel="stylesheet" type="text/css">
+<link href="{CDN}/static/datetimepicker/css/datetimepicker.min.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+
+<div class="breadcrumb-box">
+<ul class="breadcrumb">
+  <li>管理员 <span class="divider">/</span></li>
+  <li><a href="#">添加管理员</a></li>
+</ul>
+</div>
+
+<div class="body-box">
+ <form class="form-inline" method="post"onsubmit="return request(this);">
+		<div class="control-group">
+			<div class="group-row">用 户 名：<input type="text" name="username"<!--{if($user['username']):}--> value="{$user['username']}" <!--{endif;}--> placeholder="必填只能英文4~16个字"></div>
+			<div class="group-row">密　　码：<input type="text" name="password" placeholder="必填长度6~32"></div>
+			<div class="group-row">真实姓名：<input type="text" name="realname"<!--{if($user['realname']):}--> value="{$user['realname']}" <!--{endif;}--> placeholder="必填中文4~16个字
+"></div>
+			<div class="group-row">用户渠道：<input type="text" name="platform"<!--{if($user['platform']):}--> value="{$user['platform']}" <!--{endif;}--> placeholder="必填英文
+"></div>
+			<div class="group-row">角色权限：<select name="role">
+			 <!--{if(!$user):}--> <option>请选择</option><!--{endif;}-->
+				<!--{foreach($roles as $role):}-->
+				<option value="{$role['id']}"<!--{if($user['role']==$role['id']):}--> selected<!--{endif;}-->>{$role['rolename']}</option>
+				<!--{endforeach;}-->
+			</select></div>			
+		</div>
+		<div class="control-group">
+			<div class="controls text-center">
+			 <input type="hidden" name="id"<!--{if($user['id']):}--> value="{$user['id']}" <!--{endif;}--> >
+			  <button type="submit" class="btn">提交</button>
+			</div>
+		</div>
+    </form>
+  </div>
+  
+<script type="text/javascript" src="{CDN}/static/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="{CDN}/static/bootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="{CDN}/static/datetimepicker/js/bootstrap-datetimepicker.min.js"></script>
+<script type="text/javascript" src="{CDN}/static/datetimepicker/locales/bootstrap-datetimepicker.zh-CN.js"></script>
+<script type="text/javascript" src="{CDN}/static/admin/js/admin.min.js"></script>
+</body>
+</html>

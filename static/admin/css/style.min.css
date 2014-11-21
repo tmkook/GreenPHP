@@ -1,0 +1,42 @@
+/*reset*/
+body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,input,textarea,p,blockquote,th,td{margin:0;padding:0;} 
+html,body{color:#333;background:#F1F1F1 url(../img/whitey_light.png) repeat;font:13px Arial, "微软雅黑";padding:6px;}
+table{border-collapse:collapse;border-spacing:0;}
+fieldset,img{border:0;} 
+ol,ul{list-style:none;} 
+h1,h2,h3,h4,h5,h6{font-size:100%;}
+input, textarea, select{*font-size:100%;}
+a{color:#0370DA;text-decoration:none;}
+a:hover{text-decoration:underline;}
+
+/*Global*/
+.left{float:left;}
+.right{float:right;}
+.clean:before, .clean:after{content:"";display:table;}
+.clean:after{clear:both;}
+.clean{zoom:1;}
+
+
+.breadcrumb-box{border-top:solid 1px #CCC;border-bottom:solid 1px #FFF; margin-bottom:20px;}
+.breadcrumb{background:none;border-top:solid 1px #FFF;border-bottom:solid 1px #CCC;border-radius:0;margin:0;}
+
+.body-box{background:#FFF;border:solid 1px #CCC;}
+.body-box input,.body-box select,.body-box button{margin:0;}
+
+.body-box .form-inline{display:inline-block;padding:20px;}
+
+.control-group .group-row{margin-bottom:15px;}
+
+.table-tools{background:#FFF;line-height:6em;padding:0 10px;}
+.table{background:#FFF;border-top:solid 1px #DEDEDE;border-bottom:solid 1px #DEDEDE;margin:0;}
+.table thead th,.table thead a{color:#50769B;}
+
+.table td,.table th{padding:8px;}
+
+.app-modal{min-width:60%;margin-left:-30%;}
+.act-msg{position:absolute;display:none;padding:8px 40px;border:solid 1px #FEE3AB;border-radius:4px;background:#FCF1D3;text-align:center;margin-top:4px;left:50%;margin-left:-100px;z-index:999;}
+
+.formlist{padding:40px;}
+.formlist .control-group{border-bottom:solid 1px #EEE;padding:20px 0;}
+.formlist .control-group form p{margin-top:5px;}
+.formlist label{display:inline-block;width:150px;text-align:right;margin-right:10px;}

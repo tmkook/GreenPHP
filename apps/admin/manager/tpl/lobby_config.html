@@ -1,0 +1,80 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>大厅配置</title>
+<link href="{CDN}/static/bootstrap/css/bootstrap.css" rel="stylesheet" type="text/css">
+<link href="{CDN}/static/admin/css/style.min.css" rel="stylesheet" type="text/css">
+<link href="{CDN}/static/datetimepicker/css/datetimepicker.min.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+
+<div class="breadcrumb-box">
+<ul class="breadcrumb">
+  <li><span>配置</span> <span class="divider">/</span></li>
+  <li><a href="#">大厅配置</a></li>
+</ul>
+</div>
+
+<div class="body-box">
+   
+	<div class="control-group">		
+			
+		<div class="group-row">
+		<form method="post" style="display:inline-block;width:100%" onsubmit="return request(this);">		
+		 <table class="table table-hover table-striped">				  
+				<tr><td width="220">进入场次所需最低余额：</td><td><input type="text" name="room_minimum"  value="{$config['room_minimum']}" class="span8" /></td></tr>
+		       <tr><td>是否开启兑换(0为关闭,1为开启)：</td><td><input type="text" name="exchange_status"  value="{$config['exchange_status']}" class="span8" /></td></tr>
+		       <tr><td>救济金(领取次数,领取金额,间隔秒)：</td><td><input type="text" name="alms"  value="{$config['alms']}" class="span8" /></td></tr>		       
+		       <tr><td>兑换的商品：</td><td><div id="goods"style="position:relative;"> <a href="javascript:;" class="search_add pull-left"style="position:absolute;left:-120px;"><i class="icon icon-plus"></i></a>
+			   <!--{foreach($config['goods'] as $key=>$val):}-->
+		        <p class="good">名称：  <input type="text" name="name[]"  value="{$val['name']}" class="span2" /> 类型：  <input type="text" name="type[]"  value="{$val['type']}" class="span2" />
+		     金额：  <input type="text" name="money[]"  value="{$val['money']}" class="span2" /> 价值：  <input type="text" name="value[]"  value="{$val['value']}" class="span1" /><a href="javascript:;" class="search_del"><i class="icon icon-minus"></i></a></p>       
+	       
+				<!--{endforeach;}-->
+		   	       
+		   </div></td></tr>
+		   
+		    <tr><td>商品配置：</td><td><div id="product"style="position:relative;"> <a href="javascript:;" class="search_add pull-left"style="position:absolute;left:-120px;"><i class="icon icon-plus"></i></a>
+			   <!--{foreach($config['product'] as $key=>$val):}-->
+		        <p class="product">名称：  <input type="text" name="product[name][]"  value="{$val['name']}" class="span2" /> 描述：  <input type="text" name="product[description][]"  value="{$val['description']}" class="span2" /> 商品id：  <input type="text" name="product[productid][]"  value="{$val['productid']}" class="span2" /> 金额：  <input type="text" name="product[value][]"  value="{$val['value']}" class="span1" />
+		     金币数量：  <input type="text" name="product[gamemoney][]"  value="{$val['gamemoney']}" class="span2" /> 赠送倍数：  <input type="text" name="product[add][]"  value="{$val['add']}" class="span1" /><a href="javascript:;" class="search_del"><i class="icon icon-minus"></i></a></p>       
+	       
+				<!--{endforeach;}-->
+		   	       
+		   </div></td></tr>
+	         	<tr><td></td><td>&nbsp;&nbsp;&nbsp;&nbsp;<button class="btn" type="submit" >更新配置</button></td></tr>
+        	
+        	</table>
+			</form>	
+		</div>				
+	</div>
+    
+
+</div>
+
+<script type="text/javascript" src="{CDN}/static/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="{CDN}/static/bootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="{CDN}/static/datetimepicker/js/bootstrap-datetimepicker.min.js"></script>
+<script type="text/javascript" src="{CDN}/static/datetimepicker/locales/bootstrap-datetimepicker.zh-CN.js"></script>
+<script type="text/javascript" src="{CDN}/static/admin/js/admin.min.js"></script>
+<script type="text/javascript"src="{CDN}/static/admin/js/searchtools.js"></script>
+<script type="text/javascript">
+
+$.fn.SearchTools({
+		container:"#goods",
+		selects:".good",
+		add:".search_add",
+		del:".search_del",
+	},false);
+$.fn.SearchTools({
+	container:"#product",
+	selects:".product",
+	add:".search_add",
+	del:".search_del",
+},false);
+
+</script>
+</body>
+</html>

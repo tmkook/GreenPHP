@@ -1,65 +1,77 @@
 <?php
-/*
-* 初始化
-* 自动加载library类库
-* 自动加载extends扩展类库
-* 增加配置文件目录
-*/
-error_reporting(~E_NOTICE);
-require_once 'core/library/Loader.class.php';
-Loader::addPath(dirname(__FILE__).'/core/extends/');
-Loader::autoload();
-Config::addPath(dirname(__FILE__).'/core/config/');
+//初始化
+require_once 'core/boot.inc.php';
 
-/*
-* 获取请求模块
-* m 为模块
-* c 为控制器
-* t 为控制器内自定义方法
-* 将请求的模块控制器加载进来
-*/
-$m = empty($_GET['m'])? 'mgr' : addslashes($_GET['m']);
-$c = empty($_GET['c'])? 'index' : addslashes($_GET['c']);
-if(empty($_GET['t'])) throw new Exception("请求的接口不存在",301);
-$t = $_GET['t'];
-$file = "apps/api/{$m}/";
-if( ! is_dir($file)){
-    throw new Exception("请求的模块不存在",302);
-}
-if( ! file_exists($file.$c.'.php')){
-    throw new Exception("请求的模块文件不存在",303);
-}
-require_once $file.$c.'.php';
-
-//全局函数
-function jsonEncode($arr){
-    $json = json_encode($arr);
-    return preg_replace("#\\\u([0-9a-f]{4})#ie", "iconv('UCS-2BE', 'UTF-8', pack('H4', '\\1'))", $json);
-}
-
-/*
-* 执行请求的方法
-* 并将返回的数据格式化输出
-* 如果遇到异常格式化错误信息输出
-*/
 try{
-	if(strpos($t,'sig_') !== false){
-		$usersig = new UserSig();
-		$httpquery = new HttpQuery();
-		$extparam = json_decode($httpquery->query('extparam'),true);
-		$usersig->verifySig($extparam['sig']);
+	/*
+	* 获取请求模块
+	* m 为模块
+	* c 为控制器
+	* t 为控制器内自定义方法
+	* 将请求的模块控制器加载进来
+	*/
+	if(empty($_GET['m'])) throw new Exception("请求的模块不存在",301);
+	if(empty($_GET['c'])) throw new Exception("请求的接口不存在",302);
+	if(empty($_GET['t'])) throw new Exception("请求的方法不存在",303);
+	
+	$m = addslashes($_GET['m']);
+	$c = addslashes($_GET['c']);
+	$t = addslashes($_GET['t']);
+
+	$file = APPPATH."/api/{$m}/";
+	if( ! is_dir($file)){
+		throw new Exception("请求的模块不存在",304);
+	}
+	if( ! file_exists($file.$c.'.php')){
+		throw new Exception("请求的模块文件不存在",305);
+	}
+	require_once $file.$c.'.php';
+
+	/*
+	* 执行请求的方法
+	* 并将返回的数据格式化输出
+	* 如果遇到异常格式化错误信息输出
+	*/
+	$extparam = HttpQuery::extparam();
+	$param = HttpQuery::param();
+	$paytag = array(
+		'apple_pay',
+		'ipay_callback',
+		'iappios_pay',
+		'iapp_pay',
+		'cake_pay',
+		'cron_send',
+		'xyzs_pay',
+		'haima_pay',
+	);
+	if(empty($extparam['reqapp']) && !in_array($t,$paytag)){
+		throw new Exception("必须注明请求接口的应用名称 extparam.reqapp",306);
+	}
+	if(strpos($t,'sig_') !== false && isset($param['uin']) && $param['uin'] >= 200000){ //用户id大于200000时验证sig
+		HttpQuery::isSigin($extparam['sig']);
 	}
     $contrl = new $c();
     $data = $contrl->$t();
+    //记录请求日志
 	$log = Logs::connect(Config::get('logs.conf/success_log'));
-	$log->write("#POST: ".json_encode($_POST)."\r\n#GET: ".json_encode($_GET)."\r\n#RST: ".json_encode(array('code'=>100,'data'=>$data)));
+	$log->write(getHeadersString()."Rst: ".jsonEncode($data));
     echo jsonEncode(array('code'=>100,'data'=>$data));
 }catch(PDOException $e){
+	//记录DB异常
 	$log = Logs::connect(Config::get('logs.conf/mysql_log'));
-	$log->write($e->getTraceAsString()."\r\n#POST: ".json_encode($_POST)."\r\n#GET: ".json_encode($_GET));
+	$log->write(getHeadersString());
     echo jsonEncode(array('code'=>$e->getCode(),'desc'=>$e->getMessage()));
 }catch(Exception $e){
+	//记录脚本异常
 	$log = Logs::connect(Config::get('logs.conf/php_log'));
-	$log->write($e->getTraceAsString()."\r\n#POST: ".json_encode($_POST)."\r\n#GET: ".json_encode($_GET));
-    echo jsonEncode(array('code'=>$e->getCode(),'desc'=>$e->getMessage()));
+	$log->write(getHeadersString()."Msg: ".$e->getMessage().$e->getCode());
+	$msg = $e->getMessage();
+	//$_SERVER['API_LANGUAGE'] = 'en';
+	if(isset($_SERVER['API_LANGUAGE'])){
+		$lang = Config::get($_SERVER['API_LANGUAGE'].'.conf');
+		if(isset($lang[$msg])){
+			$msg = $lang[$msg];
+		}
+	}
+    echo jsonEncode(array('code'=>$e->getCode(),'desc'=>$msg));
 }

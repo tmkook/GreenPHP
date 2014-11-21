@@ -48,21 +48,13 @@ ul{list-style:none;}
 <h1><a href="./api">API Docs</a></h1>
 
 <hr />
-<p>接口请求说明：</p>
-<ul>
-<li>http://{TESTBASEURL}/api/ 服务器地址</li>
-<li>module/class/method 请求的接口(method 以 “sig_” 开头必须在 extparam 中传 sig 签名进行登录验证)</li>
-<li>?parameter={...} 请求的参数</li>
-<li>&extparam={...} 额外参数</li>
-</ul>
-
 
 <!--API列表-->
 <!--{foreach($apis as $mod=>$classes):}-->
 <h3>{$mod}</h3>
 <table width="100%">
 <thead>
-<tr><th>接口分类</th><th>接口说明</th><th>接口详细文档</th></tr>
+<tr><th width="80">接口分类</th><th>接口说明</th><th width="260">接口详细文档</th><th>作者</th><th>最后编辑</th></tr>
 </thead>
 <tbody>
 <!--{foreach($classes as $k=>$cls):}-->
@@ -70,11 +62,14 @@ ul{list-style:none;}
 		<td rowspan="{$cls['rowspan']}" align="center" valign="middle">{$cls['name']}</td>
 		<!--{foreach($cls['methods'] as $obj):}-->
 			<!--{$reflect = new ApiDocReflect($obj->getDocComment());}-->
-			<!--{$example = $reflect->getExample();}-->
 			<!--{$descr = $reflect->getDescr();}-->
+			<!--{$author = $reflect->getTag('@author');}-->
+			<!--{$edit = $reflect->getTag('@edit');}-->
 			<!--{$vt = $obj->getName();}-->
 			<td>{$descr[0]}</td>
-			<td><a href="?vm={$mod}&vc={$cls['name']}&vt={$vt}">{$example['uri']}</a></td>
+			<td><a href="?vm={$mod}&vc={$cls['name']}&vt={$vt}">{$mod}/{$cls['name']}/{$vt}</a></td>
+			<td align="center">{$author[0]}</td>
+			<td align="center">{$edit[1]} {$edit[0]}</td>
 			<!--{if($k==$cls['rowspan']-1):}-->
 				</tr>
 			<!--{else:}-->

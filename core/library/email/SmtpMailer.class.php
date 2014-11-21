@@ -2,7 +2,7 @@
 /**
 * SMTP发送邮件工厂对象
 */
-class smtp_mailer extends email
+class SmtpMailer extends email
 {   
 
     public function send($to,$title,$body,$additional=''){
@@ -44,7 +44,7 @@ class smtp
 
     function sendmail($to,$from,$subject="",$body="",$mailtype,$cc="",$bcc="",$additional_headers=""){
         $mail_from = $this->get_address($this->strip_comment($from));
-        $body = ereg_replace("(^|(\r\n))(\\.)", "\\1.\\3", $body);
+        $body = preg_replace("/(^|(\r\n))(\\.)/", "\\1.\\3", $body);
         $header = "MIME-Version:1.0\r\n";
         if($mailtype=="HTML"){
             $header .= "Content-Type:text/html\r\n";
@@ -87,8 +87,9 @@ class smtp
             fclose($this->sock);
             $this->log_write("Disconnected from remote host\n");
         }
-        echo "<br>";
-        echo $header;
+		if($this->debug){
+			echo $header;
+		}
         return $sent;
     }
   
@@ -160,7 +161,7 @@ class smtp
   
   function smtp_sockopen_mx($address)
   {
-    $domain = ereg_replace("^.+@([^@]+)$", "\\1", $address);
+    $domain = preg_replace("/^.+@([^@]+)$/", "\\1", $address);
     if (!@getmxrr($domain, $MXHOSTS)) {
     $this->log_write("Error: Cannot resolve MX \"".$domain."\"\n");
     return FALSE;
@@ -200,7 +201,7 @@ class smtp
     $response = str_replace("\r\n", "", fgets($this->sock, 512));
     $this->smtp_debug($response."\n");
     
-    if (!ereg("^[23]", $response)) {
+    if (!preg_match("/^[23]/", $response)) {
     fputs($this->sock, "QUIT\r\n");
     fgets($this->sock, 512);
     $this->log_write("Error: Remote host returned \"".$response."\"\n");
@@ -250,9 +251,9 @@ class smtp
   
   function strip_comment($address)
   {
-    $comment = "\\([^()]*\\)";
-    while (ereg($comment, $address)) {
-      $address = ereg_replace($comment, "", $address);
+    $comment = "/\\([^()]*\\)/";
+    while (preg_match($comment, $address)) {
+      $address = preg_replace($comment, "", $address);
     }
     
     return $address;
@@ -260,8 +261,8 @@ class smtp
   
   function get_address($address)
   {
-    $address = ereg_replace("([ \t\r\n])+", "", $address);
-    $address = ereg_replace("^.*<(.+)>.*$", "\\1", $address);
+    $address = preg_replace("/([ \t\r\n])+/", "", $address);
+    $address = preg_replace("/^.*<(.+)>.*$/", "\\1", $address);
     
     return $address;
   }

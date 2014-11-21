@@ -1,0 +1,57 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>欢迎</title>
+<link href="{CDN}/static/bootstrap/css/bootstrap.css" rel="stylesheet" type="text/css">
+<link href="{CDN}/static/admin/css/style.min.css" rel="stylesheet" type="text/css">
+<style type="text/css">
+.info{margin-left:40px;}
+.info li{line-height:26px;}
+.box{padding:0 20px 30px 20px;}
+</style>
+</head>
+
+<body>
+
+<div class="breadcrumb-box">
+<ul class="breadcrumb">
+  <li>后台管理 <span class="divider">/</span></li>
+  <li><a href="#">欢迎</a></li>
+</ul>
+
+</div>
+
+<div class="body-box">
+<div style="padding:10px 20px 0 20px;"><h2>帐号信息</h2></div>
+<div class="box">
+	<ul class="info">
+		<li>欢迎您，{$realname} <a href="{BASEURL}/admin/mgr/edit">修改信息</a></li>
+		<li>所属角色：{$rolename}</li>
+		<li>所属渠道：{$platform}</li>
+		<li>帐号状态：{$flag}</li>
+		<li>创建时间：{$createtime}</li>
+	</ul>
+</div>
+<!--{if($platform == 'moredoo'):}-->
+<div style="padding:10px 20px;"><h2>系统信息</h2></div>
+<div class="box">
+	<ul class="info">
+		<li>系统环境：{$apache_version}</li>
+		<li>接口环境：{$isdev}</li>
+		<li>错误显示：{$errors}</li>
+		<li>Memcache：{$memcache}</li>
+		<li>Mongodb：{$mongo}</li>
+		<li>Mysql：{$mysql}</li>
+		<li>Local API：{$localapi}</li>
+		<li>接口语言：{$lang}</li>
+		<li>模板目录权限：{$temp_chmod}</li>
+		<li>大厅目录权限：{$common_chmod}</li>
+		<li>游戏目录权限：{$games_chmod}</li>
+	</ul>
+</div>
+<!--{endif;}-->
+</div>
+</body>
+</html>
+

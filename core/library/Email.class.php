@@ -17,7 +17,7 @@ $conf = array(
 		'port'=>25,
 		'type'=>'HTML',
 		'debug' => false,
-		'charset' => 'UTF-8'
+		'charset' => 'UTF-8',
 		'from'=>'dllx2007@163.com',
 		'user'=>'dllx2007@163.com',
 		'pass'=>'leonde',
@@ -29,25 +29,26 @@ var_dump($smtp->send('7040494@qq.com','标题测试','test')); //发送邮件
 */
 abstract class Email
 {
-    
-    protected $is_auth = false;
-    protected $host    = 'localhost';
+   
+    protected $is_auth = true;
+    protected $host    = 'smtp.163.com';
     protected $port    = 25;
     protected $type    = 'HTML';
     protected $debug   = false;
 	protected $charset = 'UTF-8';
-	protected $from    = 'service@greenphp.com';
-    protected $user;
-    protected $pass;
+	protected $from    = 'dllx2007@163.com';
+    protected $user    = 'dllx2007@163.com';
+    protected $pass    = 'leonde';
     protected $cc;
     protected $bcc;
 
-    public function connect($conf){
+    public static function connect($conf=array()){
 		$driver = $conf['driver'];
-        require_once dirname(__FILE__).'/email/'.$driver.'.class.php';
+        unset($conf['driver']);
+        require dirname(__FILE__).'/email/'.$driver.'.class.php';
         $obj = new $driver();
 		if( ! $obj instanceof self) throw new Exception("邮件类 '{$driver}' 未继承 'Email'");
-		$obj->initialize($conf);
+		if( ! empty($conf)) $obj->initialize($conf);
 		return $obj;
     }
 

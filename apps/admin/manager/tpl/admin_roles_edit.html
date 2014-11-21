@@ -1,0 +1,74 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>角色编辑</title>
+<link href="{CDN}/static/bootstrap/css/bootstrap.css" rel="stylesheet" type="text/css">
+<link href="{CDN}/static/admin/css/style.min.css" rel="stylesheet" type="text/css">
+<style type="text/css">
+.admin-roles-access{width:500px;}
+.admin-roles-access ul{margin-left:50px;}
+.admin-roles-access ol ul{margin-left:30px;}
+.admin-roles-access ol ul li{float:left;width:120px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.admin-roles-access label{padding:4px;}
+.admin-roles-access label:hover{background:#F1F1F1;}
+</style>
+</head>
+
+<body>
+
+<div class="breadcrumb-box">
+<ul class="breadcrumb">
+  <li>系统管理 <span class="divider">/</span></li>
+  <li><a href="#">角色编辑</a></li>
+</ul>
+</div>
+
+<div class="body-box">
+ <form class="form-inline" method="post"onsubmit="return request(this);">
+		<div class="control-group">
+			<input type="hidden" name="id" value="{$_GET['roleid']}" />
+			<div class="group-row">角色：<input type="text" name="rolename" value="{$edit['rolename']}" placeholder="必填中文1~32个字"/></div>
+			<div class="group-row">状态：<select name="flag">
+				<!--{foreach($flag as $key=>$val):}-->
+				<option value="{$key}" <!--{if($key==$edit['flag']):}-->selected<!--{endif;}-->>{$val}</option>
+				<!--{endforeach;}-->
+			</select></div>
+			<div class="group-row">权限：<label><input type="checkbox" class="selects" data-toggle="AllRoles"> 全部选择</label></div>
+			<div class="group-row admin-roles-access" id="AllRoles">
+				<ul>
+				<!--{foreach($menus as $pn=>$parent):}-->
+				<ol class="clearfix">
+					<label><input type="checkbox" class="selects" data-toggle="{$pn}" <!--{if(isset($edit['access'][$pn])):}-->checked<!--{endif;}-->/> {$parent['name']}</label>
+					<ul id="{$pn}">
+					<!--{foreach($parent['childs'] as $cn=>$child):}-->
+						<li><label><input type="checkbox" name="access[{$pn}][]" value="{$cn}" <!--{if(in_array($cn,(array)$edit['access'][$pn])):}-->checked<!--{endif;}-->/> {$child['name']}</label></li>
+					<!--{endforeach;}-->
+					</ul>
+				</ol>
+				<!--{endforeach;}-->
+				</ul>
+			</div>
+		</div>
+
+		<div class="control-group">
+			<div class="controls text-center">
+			  <button type="submit" class="btn">提交</button>
+			</div>
+		</div>
+    </form>
+  </div>
+  
+<script type="text/javascript" src="{CDN}/static/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="{CDN}/static/bootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="{CDN}/static/admin/js/admin.min.js"></script>
+<script type="text/javascript">
+$('.selects').click(function(){
+	var checkstate = $(this).prop('checked');
+	$('#'+$(this).attr('data-toggle')).find('input[type="checkbox"]').prop('checked',checkstate);
+});
+
+
+</script>
+</body>
+</html>

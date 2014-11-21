@@ -29,13 +29,15 @@ class Images
     * @param $im 读取的文件数据
     */
     public function __construct($im){
-		if(file_exists($im)){
+		if(@file_exists($im)){
 			$im = file_get_contents($im);
 		}
 		$type_code = $this->typecode($im);
 		if(!isset($this->exif_type[$type_code])) throw new Exception("不支持的图像格式");
 		$this->im_type = $this->exif_type[$type_code];
 		$this->is_animat = preg_match("/".chr(0x21).chr(0xff).chr(0x0b).'NETSCAPE2.0'."/",$im); //是否动画
+		$this->im = $im;
+		if($this->im_type == 'flash' || $this->is_animat) return $this;
 		$this->im = imagecreatefromstring($im); //创建图像
         $this->im_w = imagesx($this->im);
         $this->im_h = imagesy($this->im);
@@ -80,8 +82,8 @@ class Images
 	*
 	* @param $w 图片宽
 	* @param $h 图片高
-	* @param $x x坐标
-	* @param $y y坐标
+	* @param $x x坐标值或left middle right
+	* @param $y y坐标值或top middle bottom
 	*/
     public function crop($w,$h,$x=0,$y=0){
 		if($this->im_type == 'flash' || $this->is_animat) return $this;
@@ -91,8 +93,27 @@ class Images
         $im_w = $this->im_w;
         $im_h = $this->im_h;
         if($w > $im_w || $h > $im_h){
-            throw new Exception("裁切尺寸不能大于原始图");
+			return $this;
+            //throw new Exception("裁切尺寸不能大于原始图");
         }
+		if(!is_numeric($x)){
+			if($x==='middle'){
+				$x = ceil(($im_w - $w) / 2);
+			}elseif($x==='right'){
+				$x = ceil($im_w - $w);
+			}else{
+				$x = 0;
+			}
+		}
+		if(!is_numeric($y)){
+			if($y==='middle'){
+				$y = ceil(($im_h - $h) / 2);
+			}elseif($y==='bottom'){
+				$y = ceil($im_h - $h);
+			}else{
+				$y = 0;
+			}
+		}
         $dst_im = imagecreatetruecolor($w,$h);
         imagealphablending($dst_im,false);
         imagesavealpha($dst_im,true);
@@ -100,6 +121,8 @@ class Images
         imagefill($dst_im,0,0,$white);
         imagecopyresampled($dst_im,$this->im,0,0,$x,$y,$w,$h,$w,$h);
         $this->im = $dst_im;
+		$this->im_w = $w;
+		$this->im_h = $h;
         return $this;
     }
     
@@ -110,13 +133,26 @@ class Images
 	*
 	* @param $w 图片宽
 	* @param $h 图片高
+	* @param $midtype 以最大值max或最小值min进行缩放
 	*/
-    public function zoom($w=0,$h=0){
+    public function zoom($w=0,$h=0,$midtype=0){
 		if($this->im_type == 'flash' || $this->is_animat) return $this;
         $im_w = $this->im_w;
         $im_h = $this->im_h;
         $x = $y = 0;
-        if(empty($w) && $h > 0){ //自动定宽
+		if($midtype==='min'){
+			if($im_w > $im_h){
+				return $this->zoom(0,$h,0);
+			}else{
+				return $this->zoom($w,0,0);
+			}
+		}elseif($midtype==='max'){
+			if($im_w > $im_h){
+				return $this->zoom($w,0,0);
+			}else{
+				return $this->zoom(0,$h,0);
+			}
+        }elseif(empty($w) && $h > 0){ //自动定宽
             if($im_h > $h){
                 $new_w = $h / $im_h * $im_w;
                 $new_h = $h;
@@ -148,7 +184,7 @@ class Images
             $y = intval(($h - $new_h) / 2); //画布y间距
             $canvas_w = $w;
             $canvas_h = $h;
-        }else{ //无缩放
+		}else{ //无缩放
             $canvas_w = $new_w = $im_w;
             $canvas_h = $new_h = $im_h;
         }
@@ -159,6 +195,8 @@ class Images
         imagefill($dst_im,0,0,$white);
         imagecopyresampled($dst_im,$this->im,$x,$y,0,0,$new_w,$new_h,$im_w,$im_h);
         $this->im = $dst_im;
+		$this->im_w = $canvas_w;
+		$this->im_h = $canvas_h;
         return $this;
     }
     
@@ -167,6 +205,9 @@ class Images
 	*/
     public function display(){
         header("Content-type:image/{$this->im_type}");
+		if($this->im_type == 'flash' || $this->is_animat){
+			exit($this->im);
+		}
 		$func = "image{$this->im_type}";
         $func($this->im);
     }
@@ -179,7 +220,7 @@ class Images
 	*/
     public function save($path){
 		if($this->im_type == 'flash' || $this->is_animat){
-			return file_put_content($path,$this->im);
+			return file_put_contents($path,$this->im);
 		}
 		$func = "image{$this->im_type}";
         return $func($this->im,$path);
