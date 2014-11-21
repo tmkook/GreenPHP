@@ -1,6 +1,14 @@
 GreenPHP
 ========
-
+##框架特色
+--------
+专为多平台应用开发订制，框架分为以下四部份：
+-RestApi快速开发
+-自动生成Api文档
+-Web开发
+-后台管理
+清晰的MVC模式，集成常用功能类库，经历三年线上运行保持稳定！
+--------
 ##目录说明：
 	*apps  项目文件
 	*	web  前端项目
@@ -18,7 +26,9 @@ GreenPHP
 	*后台页面：http://host/dir/admin/module/phpfilename
 	*host 主机域名
 	*dir 定向到框架根目录（即 index.php 所在目录）
-	*view 或 admin 固定（区分前台与后台）
-	*module/web 或 module/admin 目录下的哪个模块
-	*phpfilename 即 module/web 或 module/admin 的模块下对应的php文件名
+	*view 或 admin 固定（区分前台与后台可在.htaccess文件修改）
+	*module 即apps项目下的目录名
+	*phpfilename 即 apps 项目目录下的php文件名(不包含php后缀)
+	*如要访问 htdocs/apps/admin/mgr/login.php 文件
+	*URL为 http://localhost/admin/mgr/login
 		
