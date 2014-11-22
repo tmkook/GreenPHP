@@ -4,6 +4,7 @@ RewriteEngine on
 # 并将username改为您系统用户名
 # 将YourPath改为项目所在目录
 #RewriteBase /~username/YourPath
+RewriteBase /~dengliang/GreenPHP
 
 RewriteRule   api/(\w+)/(\w+)/(\w+)$ api.php?m=$1&c=$2&t=$3 [NC,QSA,L]
 RewriteRule   view/(\w+)/(\w+)$ index.php?m=$1&c=$2 [NC,QSA,L]
