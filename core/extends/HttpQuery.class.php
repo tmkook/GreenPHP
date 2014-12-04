@@ -1,9 +1,12 @@
 <?php
+//对接口请求进行封装
+//方便PHP请求自己的接口
 class HttpQuery
 {
 	protected static $param;
 	protected static $extparam;
 	
+	//验证签名
 	public static function isSigin(){
 		$param = self::param();
 		$extparam = json_decode(self::query('extparam'),true);
@@ -15,6 +18,7 @@ class HttpQuery
 		return $userinfo;
 	}
 	
+	//API请求
 	public static function api($api,$param,$ext=array()){
 		$extparam = self::extparam();
 		$extparam = json_encode(array_merge((array)$extparam,(array)$ext));
@@ -27,6 +31,7 @@ class HttpQuery
 		return (array)json_decode($rst,true);
 	}
 	
+	//异步API请求
 	public static function apiAsync($api,$param,$ext=array()){
 		$extparam = self::extparam();
 		$extparam = json_encode(array_merge((array)$extparam,(array)$ext));
@@ -37,56 +42,7 @@ class HttpQuery
 		);
 		HttpAsync::request(APIBASEURL.$api,$query,'');
 	}
-	
-	public static function imChatPush($param,$is_async=true){
-		if($is_async){
-			$rst = HttpQuery::apiAsync('/service/notification/imchat_push',$param,array('reqapp'=>'imChatPush'));
-		}else{
-			$rst = HttpQuery::api('/service/notification/imchat_push',$param,array('reqapp'=>'imChatPush'));
-		}
-		return $rst;
-	}
-	
-	public static function imCapture($param,$is_async=true){
-		if($is_async){
-			$rst = HttpQuery::apiAsync('/service/notification/im_capture',$param,array('reqapp'=>'imCapture'));
-		}else{
-			$rst = HttpQuery::api('/service/notification/im_capture',$param,array('reqapp'=>'imCapture'));
-		}
-		return $rst;
-	}
-
-	public static function imConfig($param,$is_async=true){
-		if($is_async){
-			$rst = HttpQuery::apiAsync('/service/notification/im_config',$param,array('reqapp'=>'imConfig'));
-		}else{
-			$rst = HttpQuery::api('/service/notification/im_config',$param,array('reqapp'=>'imConfig'));
-		}
-		return $rst;
-	}
-
-	public static function imIp($param,$is_async=true){
-		if($is_async){
-			$rst = HttpQuery::apiAsync('/service/notification/im_ip',$param,array('reqapp'=>'imIp'));
-		}else{
-			$rst = HttpQuery::api('/service/notification/im_ip',$param,array('reqapp'=>'imIp'));
-		}
-		return $rst;
-	}
-
-	public static function imVersion($param,$is_async=true){
-		if($is_async){
-			$rst = HttpQuery::apiAsync('/service/notification/im_version',$param,array('reqapp'=>'imVersion'));
-		}else{
-			$rst = HttpQuery::api('/service/notification/im_version',$param,array('reqapp'=>'imVersion'));
-		}
-		return $rst;
-	}
-	
-	public static function applePush($param){
-		HttpQuery::apiAsync('/service/notification/apple_push',$param,array('reqapp'=>'applePush'));
-	}
-	
+		
 	public static function get($key){
 		return isset($_GET[$key])? $_GET[$key] : '';
 	}
@@ -124,5 +80,4 @@ class HttpQuery
 	public static function isAjax(){
 		return isset($_SERVER["HTTP_X_REQUESTED_WITH"]) && strtolower($_SERVER["HTTP_X_REQUESTED_WITH"])=="xmlhttprequest";
 	}
-
 }

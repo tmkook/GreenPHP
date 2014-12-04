@@ -34,19 +34,6 @@ try{
 	*/
 	$extparam = HttpQuery::extparam();
 	$param = HttpQuery::param();
-	$paytag = array(
-		'apple_pay',
-		'ipay_callback',
-		'iappios_pay',
-		'iapp_pay',
-		'cake_pay',
-		'cron_send',
-		'xyzs_pay',
-		'haima_pay',
-	);
-	if(empty($extparam['reqapp']) && !in_array($t,$paytag)){
-		throw new Exception("必须注明请求接口的应用名称 extparam.reqapp",306);
-	}
 	if(strpos($t,'sig_') !== false && isset($param['uin']) && $param['uin'] >= 200000){ //用户id大于200000时验证sig
 		HttpQuery::isSigin($extparam['sig']);
 	}

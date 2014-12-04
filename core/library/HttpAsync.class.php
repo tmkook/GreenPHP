@@ -1,5 +1,21 @@
 <?php
-//异步Http请求
+/**
+*--------------------------------------------------------------
+* 异步Http请求
+*--------------------------------------------------------------
+* 最后修改时间 2012-12-04 Leon
+* @author Leon(tmkook@gmail.com)
+* @date 2011-2-27
+* @copyright GreenPHP
+* @version $Id$
+* 异步请求无返回值
+#--------------------------------------------------------------
+HttpAsync::add("http://localhost/quque/http.php",array("name"=>'test1'));
+HttpAsync::add("http://localhost/quque/http.php",array("name"=>'test2'));
+HttpAsync::add("http://localhost/quque/http.php",array("name"=>'test3'));
+HttpAsync::run();
+---------------------------------------------------------------#
+*/
 class HttpAsync
 {
 	protected static $reqs = array(); //请求列表
@@ -95,7 +111,3 @@ class HttpAsync
 	    return $cookie_string;
 	}
 }
-//HttpAsync::request("http://localhost/quque/http.php",array("name"=>'test1'));
-//HttpAsync::request("http://localhost/quque/http.php",array("name"=>'test2'));
-//HttpAsync::request("http://localhost/quque/http.php",array("name"=>'test3'));
-//HttpAsync::run();
