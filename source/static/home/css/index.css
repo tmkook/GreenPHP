@@ -1,0 +1,26 @@
+*{padding:0;margin:0;}
+body{
+	font-family:Arial, "宋体";
+	background:#B9B9B9;
+	color:#000000;
+}
+.main{
+	background:#FFFFFF;
+	width:70%;
+	margin:2em auto;
+	padding:15px;
+	border-top-left-radius: 5px 5px;
+	border-top-right-radius: 5px 5px;
+	border-bottom-right-radius: 5px 5px;
+	border-bottom-left-radius: 5px 5px;
+	-webkit-box-shadow: 2px 4px 10px #555;
+	border-radius: 5px;
+	line-height:26px;
+	font-size:14px;
+}
+.main h1{
+	font-size:22px;
+    padding:6px;
+    background:url(../img/logo.png) no-repeat right;
+}
+.info{padding:6px;}

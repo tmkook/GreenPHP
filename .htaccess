@@ -5,6 +5,8 @@ RewriteEngine on
 # 将YourPath改为项目所在目录
 #RewriteBase /~username/YourPath
 
-RewriteRule   api/(\w+)/(\w+)/(\w+)$ api.php?m=$1&c=$2&t=$3 [NC,QSA,L]
-RewriteRule   view/(\w+)/(\w+)$ index.php?m=$1&c=$2 [NC,QSA,L]
-RewriteRule   admin/(\w+)/(\w+)$ admin.php?m=$1&c=$2 [NC,QSA,L]
+RewriteRule  ^/?$ apps/index.php [NC,QSA,L] #首页
+RewriteRule  view/(\w+)/(\w+)$ apps/index.php?m=$1&c=$2 [NC,QSA,L]
+RewriteRule  api/(\w+)/(\w+)/(\w+)$ apps/api.php?m=$1&c=$2&t=$3 [NC,QSA,L]
+RewriteRule  admin/(\w+)/(\w+)$ apps/admin.php?m=$1&c=$2 [NC,QSA,L]
+RewriteRule  startup/(\w+)/(\w+)$ startup/index.php?m=$1&c=$2 [NC,QSA,L]

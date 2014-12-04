@@ -8,17 +8,20 @@
 */
 error_reporting(~E_NOTICE);
 require_once dirname(__FILE__).'/library/Loader.class.php';
-Loader::addPath(dirname(__FILE__).'/extends/');
 Loader::autoload();
-Config::addPath(dirname(__FILE__).'/config/');
-$path = trim(dirname($_SERVER['SCRIPT_NAME']),'/');
+
+//加载配置
+Config::addPath(dirname(dirname(__FILE__)).'/source/config/');
+
+//路径初始化
+$path = trim(trim(dirname(dirname($_SERVER['SCRIPT_NAME'])),'/'),"\\");
 $path = empty($path)? '' : '/'.$path;
 
 //主页URL
 define('BASEURL',$path);
 
 //默认为当前项目根目录，如有CDN则配置为CDN地址
-define('CDN',$path);
+define('CDN',$path.'/source');
 
 //apps目录
 define('APPPATH',dirname(dirname(__FILE__)).'/apps');
