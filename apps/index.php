@@ -14,7 +14,7 @@ $_GET['c'] = empty($_GET['c'])? 'index' : addslashes($_GET['c']);
 $file = APPPATH."/web/{$_GET['m']}/";
 
 if( ! is_dir($file) ||  ! file_exists($file.$_GET['c'].'.php')){
-    exit(404);
+    exit('404');
 }
 
 require_once $file.$_GET['c'].'.php';

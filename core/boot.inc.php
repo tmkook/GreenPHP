@@ -8,6 +8,7 @@
 */
 error_reporting(~E_NOTICE);
 require_once dirname(__FILE__).'/library/Loader.class.php';
+Loader::addPath(dirname(__FILE__).'/extends/');
 Loader::autoload();
 
 //加载配置

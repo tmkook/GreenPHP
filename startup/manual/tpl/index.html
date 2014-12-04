@@ -43,25 +43,27 @@ a:hover{text-decoration:underline;}
 <div class="header clean-self">
 	<div class="logo left"><a href="#">GreenPHP<!--<img src="../libraries/base/logo.jpg" />--></a></div>
     <ul class="header-nav left">
-    	<li><a href="{BASEURL}">首页</a></li>
-    	<li><a href="https://github.com/tmkook/GreenPHP/issues" target="_main">讨论交流</a></li>
-        <li><a href="https://github.com/tmkook/GreenPHP" target="_main">贡献代码</a></li>
+    	<li><a href="{BASEURL}/startup/">首页</a></li>
+    	<li><a href="https://github.com/tmkook/GreenPHP/issues" target="_blank">讨论交流</a></li>
+        <li><a href="https://github.com/tmkook/GreenPHP" target="_blank">贡献代码</a></li>
     </ul>
 </div>
 <div class="menu left">
+    <h2>开始</h2>
+    <ul>
+    	<li><a href="#">框架简介</a></li>
+        <li><a href="#">开始开发</a></li>
+		<li><a href="#">深入了解</a></li>
+    </ul>
 	<h2>类库</h2>
     <ul>
     	<!--{foreach($files as $file):}-->
         <li><a href="view.php?file={$file}" target="_main">{$file}</a></li>
         <!--{endforeach;}-->
     </ul>
-    <h2>框架</h2>
-    <ul>
-    	<li><a href="#">API 架构模式</a></li>
-        <li><a href="#">APP 架构模式</a></li>
-    </ul>
+
 </div>
 
-<iframe src="about.php" class="body left" name="_main"></iframe>
+<iframe src="{BASEURL}/startup/manual/about" class="body left" name="_main"></iframe>
 </body>
 </html>

@@ -9,7 +9,7 @@ require_once '../core/boot.inc.php';
 * t 为控制器内自定义方法
 * 将请求的模块控制器加载进来
 */
-$_GET['m'] = empty($_GET['m'])? 'home' : addslashes($_GET['m']);
+$_GET['m'] = empty($_GET['m'])? 'manual' : addslashes($_GET['m']);
 $_GET['c'] = empty($_GET['c'])? 'index' : addslashes($_GET['c']);
 $file = dirname(__FILE__)."/{$_GET['m']}/";
 
