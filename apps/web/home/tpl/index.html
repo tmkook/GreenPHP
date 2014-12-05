@@ -12,9 +12,11 @@
 <!--{$this->display('header.html',array('name'=>$name))}-->
 
 <!--将PHP中$assign['name']作为变量输出-->
-<p class="info">Welcome use {$name}, enjoy it!</p>
-
-<p class="info"><a href="#">CheckConfig</a> | <a href="{BASEURL}/view/docs/api">ApiDocs</a> | <a href="{BASEURL}/admin/mgr/login">Admin</a></p>
+<p class="info">
+如果您第一次使用{$name}，请点击“开始”阅读入门手册。<br>
+如果您已经熟悉{$name}，那么可以删除本页愉快的编码了。
+</p>
+<p class="info"><a href="{BASEURL}/startup/">开始</a> | <a href="{BASEURL}/startup/docs/api">API文档</a> | <a href="{BASEURL}/admin/mgr/login">Admin</a></p>
 </div>
 <script type="text/javascript" src="{CDN}/static/jquery/jquery.min.js"></script> 
 </body>

@@ -33,11 +33,6 @@ class UserModel
 		if( ! $this->validate->run($param,Config::get("validate.conf/register"))){
             throw new Exception($this->validate->getMessage(), 101);
         }
-		$count = $this->getUins(array($type=>$param[$type]));
-		$maxreg = IS_DEV? 50000 : 5;
-		if($count['total'] >= $maxreg){
-			throw new Exception("您的设备注册已达上限", 103);
-		}
 		//注册用户
 		if(empty($param['platform'])) $param['platform'] = 'moredoo';
 		if(empty($param['gender'])) $param['gender'] = '1';
@@ -47,7 +42,6 @@ class UserModel
         $uin = $this->db->insertInto($this->table_users, $param)->execute();
 		$userinfo = $this->getUserInfo(array('uin'=>$uin));
 		unset($userinfo['password'],$userinfo['flag']);
-		$this->addFriend($userinfo['uin'],10000); //添加名车小秘书
         return $userinfo;
 	}
 	
