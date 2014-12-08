@@ -87,36 +87,6 @@ CREATE TABLE `success_logs` (
 
 /*Table structure for table `system_issue_money` */
 
-DROP TABLE IF EXISTS `system_issue_money`;
-
-/*Table structure for table `users` */
-
-DROP TABLE IF EXISTS `users`;
-
-CREATE TABLE `users` (
-  `uin` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `username` varchar(64) NOT NULL,
-  `password` varchar(32) NOT NULL,
-  `mobile` varchar(32) DEFAULT NULL,
-  `email` varchar(32) DEFAULT NULL,
-  `nickname` varchar(32) DEFAULT NULL,
-  `realname` varchar(32) DEFAULT NULL,
-  `gender` tinyint(1) DEFAULT '0',
-  `platform` varchar(64) DEFAULT NULL,
-  `logplatform` varchar(255) DEFAULT NULL,
-  `regapp` varchar(128) DEFAULT NULL,
-  `logapp` varchar(128) DEFAULT NULL,
-  `exp` int(10) unsigned DEFAULT '0',
-  `money` bigint(20) NOT NULL DEFAULT '0',
-  `money_verify` varchar(32) DEFAULT NULL,
-  `sigtime` int(10) unsigned DEFAULT NULL,
-  `regtime` int(11) unsigned DEFAULT NULL,
-  `msgid` smallint(6) DEFAULT '0',
-  `flag` tinyint(4) unsigned DEFAULT '1',
-  PRIMARY KEY (`uin`),
-  KEY `uin` (`uin`),
-  KEY `regtime` (`regtime`)
-) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
 INSERT INTO `pomelo`.`admin_users`(`id`,`username`,`password`,`realname`,`role`,`flag`,`createtime`) VALUES (1,'admin','e10adc3949ba59abbe56e057f20f883e','超级管理员','1','1',UNIX_TIMESTAMP(NOW()));
 
 

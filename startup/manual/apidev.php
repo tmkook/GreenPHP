@@ -78,7 +78,7 @@ class UserModel
 }
 </pre>
 </code>
-<p>到这里get_userinfo接口就完成了，你可以打开 http://localhost<?php echo BASEURL ?>/view/docs/api 文档页面查看该接口并进行测试了。</p>
+<p>到这里get_userinfo接口就完成了，你可以打开 <a href="http://localhost<?php echo BASEURL ?>/startup/docs/api" target="_blank">http://localhost<?php echo BASEURL ?>/startup/docs/api</a>文档页面查看该接口并进行测试了。</p>
 <p>具体项目代码请查看 apps/api/common/ 目录下的代码。</p>
 </body>
 </html>

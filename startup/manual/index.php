@@ -66,12 +66,14 @@ a:hover{text-decoration:underline;}
 		<li><a href="<?php echo BASEURL ?>/startup/manual/config" target="_main">配置文件</a></li>
 		<li><a href="<?php echo BASEURL ?>/startup/manual/chmod" target="_main">文件权限</a></li>
     </ul>
+	<!--
 	<h2>类库</h2>
     <ul>
     	<?php foreach($files as $file): $file = explode('/',$file); $file = end($file) ?>
         <li><a href="<?php echo BASEURL ?>/startup/manual/test?file=<?php echo $file ?>" target="_main"><?php echo $file ?></a></li>
         <?php endforeach; ?>
     </ul>
+	-->
 </div>
 
 <iframe src="<?php echo BASEURL ?>/startup/manual/about" class="body left" name="_main"></iframe>

@@ -96,7 +96,7 @@ Database继承自FluentPDO，更多功能请查阅
 </code>
 
 <h3>4、调用API</h3>
-<p>请求接口：<a href="http://localhost<?php echo BASEURL ?>/view/docs/api?vm=common&vc=user&vt=sig" target="_blank">http://localhost<?php echo BASEURL ?>/view/docs/api?vm=common&vc=user&vt=sig</a></p>
+<p>请求接口：<a href="http://localhost<?php echo BASEURL ?>/startup/docs/api?vm=common&vc=user&vt=sig" target="_blank">http://localhost<?php echo BASEURL ?>/startup/docs/api?vm=common&vc=user&vt=sig</a></p>
 <p>使用Http类请求</p>
 <code>
 <pre>

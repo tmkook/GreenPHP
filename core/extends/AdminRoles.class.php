@@ -4,6 +4,7 @@ class AdminRoles
 	protected $table = 'admin_users_roles';
 	protected $db;
 	public function __construct(){
+		Config::addPath(dirname(dirname(dirname(__FILE__))).'/source/_lang/');
 		//$this->db = Database::connect(Config::get('db.conf/default'));
 	}
 	
@@ -41,7 +42,7 @@ class AdminRoles
 	
 	
 	public function getAllMenus(){
-		$menus = $lang = include_once dirname(__FILE__).'/admin_roles/menus_lang_zhCN.php';
+		$menus = $lang = Config::get('admin_menus_zh_cn');
 		$dirs = glob(APPPATH.'/admin/*');
 		foreach($dirs as $dir){
 			if(is_dir($dir)){
